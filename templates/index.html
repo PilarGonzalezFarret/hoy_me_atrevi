@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .form-container input, .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-container button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container button:hover {
+            background: #2980b9;
+        }
+        .entry {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+            border-radius: 5px;
+        }
+        .entry h2 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+        .entry p {
+            line-height: 1.6;
+        }
+        .subtitle {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: -10px;
+    margin-bottom: 30px;
+    font-weight: normal;
+    font-size: 1.2em;
+}
+/* Modo oscuro */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .form-container {
+    background-color: #2a2a2a;
+}
+
+body.dark-mode .entry {
+    background-color: #252525;
+    border-left: 5px solid #4a90e2;
+}
+
+body.dark-mode h1,
+body.dark-mode h2 {
+    color: #bbdefb;
+}
+
+body.dark-mode .entry h2 {
+    color: #64b5f6;
+}
+
+body.dark-mode input,
+body.dark-mode textarea {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <h2 class="subtitle">Bitácora de actividades diarias</h2>
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button id="theme-toggle" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">🌙</button>
+        </div>
+        <!-- Formulario para agregar nueva entrada -->
+        <div class="form-container">
+            <h3>Agregar nueva entrada</h3>
+            <form method="POST" action="/add">
+                <input type="date" name="date" required>
+                <textarea name="text" rows="4" placeholder="Hoy me atreví a..." required></textarea>
+                <button type="submit">Guardar entrada</button>
+            </form>
+        </div>
+
+        <!-- Mostrar entradas -->
+        {% for entry in entries %}
+        <div class="entry">
+            <h2>{{ entry.display_date }}</h2>
+            <p>{{ entry.text }}</p>
+            <div class="entry-actions">
+                <a href="{{ url_for('edit_entry', index=loop.index0) }}">✏️ Editar</a>
+                <a href="{{ url_for('delete_entry', index=loop.index0) }}" 
+                onclick="return confirm('¿Seguro que quieres borrar esta entrada?')">🗑️ Borrar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+    // Verificar si el usuario ya eligió modo oscuro
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').textContent = '☀️';
+    }
+
+    // Cambiar tema al hacer clic
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        this.textContent = isDark ? '☀️' : '🌙';
+    });
+</script>
+</body>
+</html>
