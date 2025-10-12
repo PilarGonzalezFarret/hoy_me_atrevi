@@ -42,9 +42,11 @@ entries = load_entries()
 
 @app.route('/')
 def index():
-    # Formatear fechas para mostrar
+    # Ordenar entradas por fecha (de más reciente a más antigua)
+    sorted_entries = sorted(entries, key=lambda x: x["date"], reverse=False)
+    
     formatted_entries = []
-    for e in entries:
+    for e in sorted_entries:
         formatted_entries.append({
             "display_date": format_date_for_display(e["date"]),
             "text": e["text"],
@@ -85,4 +87,5 @@ def delete_entry(index):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
