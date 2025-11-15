@@ -65,47 +65,84 @@
             line-height: 1.6;
         }
         .subtitle {
-    text-align: center;
-    color: #7f8c8d;
-    margin-top: -10px;
-    margin-bottom: 30px;
-    font-weight: normal;
-    font-size: 1.2em;
-}
-/* Modo oscuro */
-body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: -10px;
+            margin-bottom: 30px;
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+        /* Modo oscuro */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .container {
+            background-color: #1e1e1e;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .form-container {
+            background-color: #2a2a2a;
+        }
+
+        body.dark-mode .entry {
+            background-color: #252525;
+            border-left: 5px solid #4a90e2;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2 {
+            color: #bbdefb;
+        }
+
+        body.dark-mode .entry h2 {
+            color: #64b5f6;
+        }
+
+        body.dark-mode input,
+        body.dark-mode textarea {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        /* Estilo para los enlaces de Editar/Borrar en modo oscuro */
+        body.dark-mode .entry-actions a {
+            color: #d186a1; /* Rojo suave pero visible */
+            text-decoration: none;
+        }
+
+        body.dark-mode .entry-actions a:hover {
+            color: #d186a1;
+            text-decoration: underline;
+        }
+
+        .btn {
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 10px 0;
+    transition: background 0.3s;
 }
 
-body.dark-mode .container {
-    background-color: #1e1e1e;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+.btn:hover {
+    background: #219653;
+    text-decoration: none;
 }
 
-body.dark-mode .form-container {
-    background-color: #2a2a2a;
+/* Modo oscuro para el botón */
+body.dark-mode .btn {
+    background: #2ecc71;
+    color: #1a1a1a;
 }
 
-body.dark-mode .entry {
-    background-color: #252525;
-    border-left: 5px solid #4a90e2;
-}
-
-body.dark-mode h1,
-body.dark-mode h2 {
-    color: #bbdefb;
-}
-
-body.dark-mode .entry h2 {
-    color: #64b5f6;
-}
-
-body.dark-mode input,
-body.dark-mode textarea {
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #555;
+body.dark-mode .btn:hover {
+    background: #27ae60;
 }
     </style>
 </head>
@@ -113,6 +150,7 @@ body.dark-mode textarea {
     <div class="container">
         <h1>{{ title }}</h1>
         <h2 class="subtitle">Bitácora de actividades diarias</h2>
+        <a href="{{ url_for('stats') }}" class="btn">📊 Ver estadísticas</a>
         <div style="text-align: right; margin-bottom: 20px;">
             <button id="theme-toggle" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">🌙</button>
         </div>
@@ -121,6 +159,13 @@ body.dark-mode textarea {
             <h3>Agregar nueva entrada</h3>
             <form method="POST" action="/add">
                 <input type="date" name="date" required>
+                <label for="categoria_id">Categoría (opcional):</label>
+<select name="categoria_id" id="categoria_id">
+    <option value="">Sin categoría</option>
+    {% for categoria in categorias %}
+    <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+    {% endfor %}
+</select>
                 <textarea name="text" rows="4" placeholder="Hoy me atreví a..." required></textarea>
                 <button type="submit">Guardar entrada</button>
             </form>
@@ -132,8 +177,8 @@ body.dark-mode textarea {
             <h2>{{ entry.display_date }}</h2>
             <p>{{ entry.text }}</p>
             <div class="entry-actions">
-                <a href="{{ url_for('edit_entry', index=loop.index0) }}">✏️ Editar</a>
-                <a href="{{ url_for('delete_entry', index=loop.index0) }}" 
+                <a href="{{ url_for('edit_entry', entry_id=entry.id) }}">✏️ Editar</a>
+                <a href="{{ url_for('delete_entry', entry_id=entry.id) }}" 
                 onclick="return confirm('¿Seguro que quieres borrar esta entrada?')">🗑️ Borrar</a>
             </div>
         </div>

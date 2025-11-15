@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>📊 Estadísticas - Hoy me atreví</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Estadísticas de “Hoy me atreví”</h1>
+        
+        <div class="stats-card">
+            <h3>Total de entradas:</h3>
+            <p>{{ total }} entradas registradas</p>
+        </div>
+
+        <div class="stats-card">
+            <h3>Hoy:</h3>
+            <p>{{ hoy }} entradas hoy</p>
+        </div>
+
+        <div class="stats-card">
+            <h3>Promedio semanal:</h3>
+            <p>{{ "%.1f"|format(promedio) }} entradas por día</p>
+        </div>
+
+        <h3>Entradas por categoría:</h3>
+        <ul>
+            {% for nombre, count in categorias_stats.items() %}
+            <li>{{ nombre }}: {{ count }} entradas</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ url_for('index') }}" class="btn">← Volver al diario</a>
+    </div>
+</body>
+</html>

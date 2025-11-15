@@ -38,15 +38,15 @@ h1 {
     line-height: 1.6;
 }
 
-        .entry-actions {
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        .entry-actions a {
-            margin-right: 15px;
-            color: #e74c3c;
-            text-decoration: none;
-        }
-        .entry-actions a:hover {
-            text-decoration: underline;
-        }
+.entry-actions {
+    margin-top: 10px;
+    font-size: 14px;
+}
+.entry-actions a {
+    margin-right: 15px;
+    color: #e74c3c;
+    text-decoration: none;
+}
+.entry-actions a:hover {
+    text-decoration: underline;
+}
